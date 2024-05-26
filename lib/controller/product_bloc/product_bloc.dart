@@ -17,23 +17,31 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   Future<FutureOr<void>> getProducttsEvent(
       GetProducttsEvent event, Emitter<ProductState> emit) async {
+    emit(ProductFetchLoadingState());
     final either = await ProductRepo().getProducts();
     either.fold((error) => emit(ProductFetchErrorState(message: error.message)),
         (response) {
       List product = response;
       productsList = product.map((e) => ProductModel.fromJson(e)).toList();
+      print('GetProductBloc ______________-- $productsList');
       emit(ProductFetchSuccessState(productList: productsList));
+      add(ImageDownloadAndStoreInfoLoacalyEvent());
     });
   }
 
   FutureOr<void> imageDownloadAndStoreInfoLoacalyEvent(
       ImageDownloadAndStoreInfoLoacalyEvent event,
       Emitter<ProductState> emit) async {
+    print('this is in side the imagedownload bloc--------------------------- ');
+    print('products url to download ${productsList[0].image}');
     final either = await ProductRepo().saveProductTodatabase(productsList);
     either.fold(
       (error) => emit(ProductFetchErrorState(message: error.message)),
       (response) {
-        emit(ProductFetchSuccessState(productList: productsList));
+        print(
+            'imageDownloadAndstoreInfoLocalybloc  ______________-- $response');
+
+        emit(ProductFetchSuccessState(productList: response));
       },
     );
   }
@@ -41,11 +49,21 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   FutureOr<void> getOfflineProductDetailsInDatabaseEvent(
       GetOfflineProductDetailsInDatabaseEvent event,
       Emitter<ProductState> emit) async {
+    emit(ProductFetchLoadingState());
     try {
-      final List<ProductModel> productList =
+      final List<ProductModel> localProductsList =
           await ProductRepo().getLocalStorageProduct();
-      emit(OfflineProductFetchSuccessState(productList: productList));
+      print('product List in bloc ${localProductsList.length}');
+      if (localProductsList.isEmpty) {
+        print('is empty ');
+        emit(LocalProductNotFoundState());
+      } else {
+        print('is not empty');
+        print('new local data ${localProductsList.length}');
+        emit(OfflineProductFetchSuccessState(productList: localProductsList));
+      }
     } catch (e) {
+      print('is error $e');
       emit(OfflineProductFetchFailedState(message: e.toString()));
     }
   }

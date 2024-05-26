@@ -1,4 +1,5 @@
 import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
+import 'package:finfresh_machin_task/view/screen_home.dart';
 import 'package:finfresh_machin_task/view/screen_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

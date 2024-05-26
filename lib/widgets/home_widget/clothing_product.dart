@@ -21,6 +21,7 @@ class ClothingProductWidget extends StatelessWidget {
             productList: productList,
           );
         } else if (state is OfflineProductFetchSuccessState) {
+          print('--------------------- local product fetch success state');
           final productList = state.productList
               .where((element) =>
                   element.category == "women's clothing" ||
@@ -29,6 +30,12 @@ class ClothingProductWidget extends StatelessWidget {
           return ProductGridViewWidget(
             productList: productList,
             isOffline: true,
+          );
+        } else if (state is ProductFetchLoadingState) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (state is LocalProductNotFoundState) {
+          return Center(
+            child: Text("Turn on you data to show product information"),
           );
         }
         return const SizedBox();

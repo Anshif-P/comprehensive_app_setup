@@ -1,4 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
 import 'dart:async';
 import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
 import 'package:finfresh_machin_task/util/constance/colors.dart';
@@ -9,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ScreenSplash extends StatefulWidget {
-  ScreenSplash({super.key});
+  const ScreenSplash({Key? key}) : super(key: key);
 
   @override
   State<ScreenSplash> createState() => _ScreenSplashState();
@@ -17,11 +16,20 @@ class ScreenSplash extends StatefulWidget {
 
 class _ScreenSplashState extends State<ScreenSplash> {
   StreamSubscription? isOnlineConnected;
-  bool isOnline = false;
+  late ValueNotifier<bool> isOnline;
+
   @override
   void initState() {
     super.initState();
-    userLoginValidation(context);
+    isOnline = ValueNotifier<bool>(false);
+    userLoginValidation();
+  }
+
+  @override
+  void dispose() {
+    isOnlineConnected?.cancel();
+    isOnline.dispose();
+    super.dispose();
   }
 
   @override
@@ -63,43 +71,11 @@ class _ScreenSplashState extends State<ScreenSplash> {
     );
   }
 
-  userLoginValidation(BuildContext context) async {
-    isOnlineConnected = InternetConnection().onStatusChange.listen((event) {
-      print(event);
-      switch (event) {
-        case InternetStatus.connected:
-          isOnline = true;
-          break;
-        case InternetStatus.disconnected:
-          isOnline = false;
-
-          break;
-        default:
-          isOnline = false;
-          break;
-      }
+  void userLoginValidation() async {
+    Future.delayed(const Duration(seconds: 4), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => ScreenParentNavigation()),
+      );
     });
-
-    if (isOnline) {
-      print('hai');
-      // User is online
-      context.read<ProductBloc>().add(GetProducttsEvent());
-      await Future.delayed(const Duration(seconds: 4));
-      context.read<ProductBloc>().add(ImageDownloadAndStoreInfoLoacalyEvent());
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => ScreenParentNavigation()),
-      );
-    } else {
-      // User is offline
-      print('hello hai');
-      context
-          .read<ProductBloc>()
-          .add(GetOfflineProductDetailsInDatabaseEvent());
-      await Future.delayed(const Duration(seconds: 3));
-
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => ScreenParentNavigation()),
-      );
-    }
   }
 }

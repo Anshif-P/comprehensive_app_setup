@@ -1,11 +1,9 @@
 class ProductModel {
   dynamic id;
   String title;
-
   String category;
   dynamic price;
   dynamic image;
-
   String? localImagePath;
 
   ProductModel({
@@ -19,12 +17,12 @@ class ProductModel {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
-      id: json['id'],
-      category: json['category'],
-      image: json['image'],
-      price: json['price'],
-      title: json['title'],
-    );
+        id: json['id'],
+        category: json['category'],
+        image: json['image'],
+        price: json['price'],
+        title: json['title'],
+        localImagePath: json['localImagePath']);
   }
 
   Map<String, dynamic> toJson() {

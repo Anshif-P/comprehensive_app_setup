@@ -20,13 +20,15 @@ class JeweleryItemWidget extends StatelessWidget {
           );
         } else if (state is OfflineProductFetchSuccessState) {
           final productList = state.productList
-              .where((element) =>
-                  element.category == "women's clothing" ||
-                  element.category == "men's clothing")
+              .where((element) => element.category == 'jewelery')
               .toList();
           return ProductGridViewWidget(
             productList: productList,
             isOffline: true,
+          );
+        } else if (state is LocalProductNotFoundState) {
+          return Center(
+            child: Text("Turn on you data to show product information"),
           );
         }
         return const SizedBox();

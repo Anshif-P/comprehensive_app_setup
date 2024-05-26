@@ -14,6 +14,8 @@ class ProductFetchErrorState extends ProductState {
   ProductFetchErrorState({required this.message});
 }
 
+class ProductFetchLoadingState extends ProductState {}
+
 class ProductStoredLocalySuccessState extends ProductState {}
 
 class OfflineProductFetchSuccessState extends ProductState {
@@ -25,3 +27,5 @@ class OfflineProductFetchFailedState extends ProductState {
   String message;
   OfflineProductFetchFailedState({required this.message});
 }
+
+class LocalProductNotFoundState extends ProductState {}

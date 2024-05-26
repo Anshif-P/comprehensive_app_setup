@@ -10,7 +10,7 @@ class ScreenParentNavigation extends StatelessWidget {
   final pageNotifier = ValueNotifier(0);
 
   final List<Widget> _screens = [
-    const ScreenHome(),
+    ScreenHome(),
     ScreenProfile(),
   ];
   @override

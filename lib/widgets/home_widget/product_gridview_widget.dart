@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finfresh_machin_task/model/product_model.dart';
 import 'package:finfresh_machin_task/util/constance/colors.dart';
@@ -21,6 +23,9 @@ class ProductGridViewWidget extends StatelessWidget {
           crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
       itemBuilder: (context, index) {
         final data = productList[index];
+
+        print('sr produt image path ${data.localImagePath}');
+
         return Container(
           width: double.maxFinite,
           decoration: BoxDecoration(
@@ -31,23 +36,27 @@ class ProductGridViewWidget extends StatelessWidget {
               children: [
                 Expanded(
                     flex: 7,
-                    child: CachedNetworkImage(
-                      width: double.maxFinite,
-                      imageUrl: data.image,
-                      placeholder: (context, url) => Shimmer.fromColors(
-                        baseColor: AppColor.extraLightGrey,
-                        highlightColor: Colors.white,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: isOffline
-                                      ? NetworkImage(data.image)
-                                      : AssetImage(data.localImagePath!)
-                                          as ImageProvider,
-                                  fit: BoxFit.cover)),
-                        ),
-                      ),
-                    )),
+                    child: isOffline
+                        ? Image.file(
+                            File(
+                              data.localImagePath!,
+                            ),
+                            width: double.maxFinite,
+                          )
+                        : CachedNetworkImage(
+                            width: double.maxFinite,
+                            imageUrl: data.image,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: AppColor.extraLightGrey,
+                              highlightColor: Colors.white,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: NetworkImage(data.image),
+                                        fit: BoxFit.cover)),
+                              ),
+                            ),
+                          )),
                 Expanded(
                     flex: 3,
                     child: Padding(

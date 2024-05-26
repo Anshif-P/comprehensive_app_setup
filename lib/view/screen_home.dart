@@ -1,19 +1,61 @@
+import 'dart:async';
+import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
 import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:finfresh_machin_task/util/constance/text_style.dart';
+import 'package:finfresh_machin_task/util/notification/notification.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/electronics_product.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/jewelery_product.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/popular_product.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/search_textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
 import '../util/constance/const_items.dart';
 import '../widgets/home_widget/clothing_product.dart';
 import '../widgets/home_widget/floating_tab_bar.dart';
 
-class ScreenHome extends StatelessWidget {
-  const ScreenHome({super.key});
+class ScreenHome extends StatefulWidget {
+  ScreenHome({super.key});
 
   @override
+  State<ScreenHome> createState() => _ScreenHomeState();
+}
+
+class _ScreenHomeState extends State<ScreenHome> {
+  final Notificationservices notification = Notificationservices();
+  final ValueNotifier<bool> isOnline = ValueNotifier<bool>(false);
+  late StreamSubscription<InternetStatus> internetSubscription;
+
+  @override
+  void initState() {
+    super.initState();
+    notification.initializationNotifications();
+    internetSubscription = InternetConnection().onStatusChange.listen((status) {
+      isOnline.value = status == InternetStatus.connected;
+      dataCheck(context);
+    });
+  }
+
+  @override
+  void dispose() {
+    internetSubscription.cancel();
+    super.dispose();
+  }
+
+  void dataCheck(BuildContext context) {
+    if (isOnline.value) {
+      notification.sendNotification('Online', 'You are online');
+      context.read<ProductBloc>().add(GetProducttsEvent());
+    } else {
+      notification.sendNotification('Network Error', 'You are offline');
+      print('hello hai how are you ');
+      context
+          .read<ProductBloc>()
+          .add(GetOfflineProductDetailsInDatabaseEvent());
+    }
+  }
+
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,

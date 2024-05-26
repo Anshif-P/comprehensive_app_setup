@@ -13,15 +13,15 @@ class Api {
     'Content-Type': 'application/json',
     'usertoken': ''
   };
+
   static EitherResponse getApi(String url, [String? token]) async {
     final uri = Uri.parse(url);
     if (token != null) {
       _header['usertoken'] = token;
     }
     try {
-      dynamic fetchedData;
       final response = await http.get(uri, headers: _header);
-      fetchedData = _getResponse(response);
+      final fetchedData = _getResponse(response);
       return Right(fetchedData);
     } on SocketException {
       return Left(InternetException());
@@ -32,12 +32,12 @@ class Api {
     }
   }
 
-  static _getResponse(http.Response response) {
+  static dynamic _getResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-        return (jsonDecode(response.body));
+        return jsonDecode(response.body);
       case 400:
-        return throw BadRequestException();
+        throw BadRequestException();
       default:
         throw BadRequestException();
     }
@@ -59,17 +59,23 @@ class Api {
 
   static EitherResponse saveProductsToDatabase(
       List<ProductModel> products) async {
+    final List<ProductModel> savedProducts = [];
     for (var product in products) {
       try {
         final imagePath =
             await downloadAndSaveImage(product.image, '${product.id}.jpg');
         product.localImagePath = imagePath;
+        print('local image path in api side ${product.localImagePath}');
+
         await DatabaseHelper.instance.insertProduct(product);
-        return Right(products);
+        savedProducts.add(product);
       } catch (e) {
-        return Left(BadRequestException());
+        // Log the error but continue processing other products
+        print('Error saving product ${product.id}: $e');
       }
     }
-    return Left(BadRequestException());
+    return savedProducts.isNotEmpty
+        ? Right(savedProducts)
+        : Left(BadRequestException());
   }
 }
