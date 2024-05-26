@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/util/constance/text_style.dart';
+
+import '../../util/constance/text_style.dart';
 
 class SearchTextFieldWidget extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();

@@ -1,4 +1,14 @@
+import 'package:finfresh_machin_task/util/constance/colors.dart';
+import 'package:finfresh_machin_task/util/constance/text_style.dart';
+import 'package:finfresh_machin_task/widgets/home_widget/electronics_product.dart';
+import 'package:finfresh_machin_task/widgets/home_widget/jewelery_product.dart';
+import 'package:finfresh_machin_task/widgets/home_widget/popular_product.dart';
+import 'package:finfresh_machin_task/widgets/home_widget/search_textfield_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import '../util/constance/const_items.dart';
+import '../widgets/home_widget/clothing_product.dart';
+import '../widgets/home_widget/floating_tab_bar.dart';
 
 class ScreenHome extends StatelessWidget {
   const ScreenHome({super.key});

@@ -1,7 +1,7 @@
+import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../controller/product_bloc/product_bloc.dart';
-import 'home_widget/product_gridview_widget.dart';
+import 'product_gridview_widget.dart';
 
 class JeweleryItemWidget extends StatelessWidget {
   const JeweleryItemWidget({super.key});
@@ -17,6 +17,16 @@ class JeweleryItemWidget extends StatelessWidget {
               .toList();
           return ProductGridViewWidget(
             productList: productList,
+          );
+        } else if (state is OfflineProductFetchSuccessState) {
+          final productList = state.productList
+              .where((element) =>
+                  element.category == "women's clothing" ||
+                  element.category == "men's clothing")
+              .toList();
+          return ProductGridViewWidget(
+            productList: productList,
+            isOffline: true,
           );
         }
         return const SizedBox();

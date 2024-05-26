@@ -1,6 +1,5 @@
+import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_app/util/constance/colors.dart';
-
 import 'search_textfield_widget.dart';
 
 class AppBarWidget extends StatelessWidget {
