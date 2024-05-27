@@ -1,11 +1,8 @@
 import 'dart:async';
-import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
 import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:finfresh_machin_task/util/constance/text_style.dart';
 import 'package:finfresh_machin_task/view/screen_parent.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({Key? key}) : super(key: key);

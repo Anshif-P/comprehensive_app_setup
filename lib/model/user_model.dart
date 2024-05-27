@@ -1,23 +1,14 @@
 class User {
-  final int? id;
-  final String name;
-  final int age;
+  int id;
+  String? imagePath;
 
-  User({this.id, required this.name, required this.age});
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'age': age,
-    };
-  }
+  User({this.imagePath, required this.id});
 
   factory User.fromMap(Map<String, dynamic> map) {
-    return User(
-      id: map['id'],
-      name: map['name'],
-      age: map['age'],
-    );
+    return User(id: map['id'], imagePath: map['imagePath']);
+  }
+
+  Map<String, dynamic> toMap() {
+    return {'id': id, 'imagePath': imagePath};
   }
 }

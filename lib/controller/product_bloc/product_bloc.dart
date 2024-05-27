@@ -23,7 +23,6 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
         (response) {
       List product = response;
       productsList = product.map((e) => ProductModel.fromJson(e)).toList();
-      print('GetProductBloc ______________-- $productsList');
       emit(ProductFetchSuccessState(productList: productsList));
       add(ImageDownloadAndStoreInfoLoacalyEvent());
     });
@@ -32,15 +31,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   FutureOr<void> imageDownloadAndStoreInfoLoacalyEvent(
       ImageDownloadAndStoreInfoLoacalyEvent event,
       Emitter<ProductState> emit) async {
-    print('this is in side the imagedownload bloc--------------------------- ');
-    print('products url to download ${productsList[0].image}');
     final either = await ProductRepo().saveProductTodatabase(productsList);
     either.fold(
       (error) => emit(ProductFetchErrorState(message: error.message)),
       (response) {
-        print(
-            'imageDownloadAndstoreInfoLocalybloc  ______________-- $response');
-
         emit(ProductFetchSuccessState(productList: response));
       },
     );
@@ -53,17 +47,13 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     try {
       final List<ProductModel> localProductsList =
           await ProductRepo().getLocalStorageProduct();
-      print('product List in bloc ${localProductsList.length}');
+
       if (localProductsList.isEmpty) {
-        print('is empty ');
         emit(LocalProductNotFoundState());
       } else {
-        print('is not empty');
-        print('new local data ${localProductsList.length}');
         emit(OfflineProductFetchSuccessState(productList: localProductsList));
       }
     } catch (e) {
-      print('is error $e');
       emit(OfflineProductFetchFailedState(message: e.toString()));
     }
   }

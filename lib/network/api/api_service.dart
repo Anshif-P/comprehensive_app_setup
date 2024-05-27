@@ -65,13 +65,11 @@ class Api {
         final imagePath =
             await downloadAndSaveImage(product.image, '${product.id}.jpg');
         product.localImagePath = imagePath;
-        print('local image path in api side ${product.localImagePath}');
 
         await DatabaseHelper.instance.insertProduct(product);
         savedProducts.add(product);
       } catch (e) {
         // Log the error but continue processing other products
-        print('Error saving product ${product.id}: $e');
       }
     }
     return savedProducts.isNotEmpty

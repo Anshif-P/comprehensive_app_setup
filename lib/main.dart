@@ -1,5 +1,5 @@
 import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
-import 'package:finfresh_machin_task/view/screen_home.dart';
+import 'package:finfresh_machin_task/controller/user_bloc/user_bloc.dart';
 import 'package:finfresh_machin_task/view/screen_splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,8 +18,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => ProductBloc(),
         ),
+        BlocProvider(
+          create: (context) => UserBloc(),
+        )
       ],
-      child: MaterialApp(
+      child: const MaterialApp(
         home: ScreenSplash(),
       ),
     );

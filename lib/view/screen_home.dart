@@ -16,7 +16,7 @@ import '../widgets/home_widget/clothing_product.dart';
 import '../widgets/home_widget/floating_tab_bar.dart';
 
 class ScreenHome extends StatefulWidget {
-  ScreenHome({super.key});
+  const ScreenHome({super.key});
 
   @override
   State<ScreenHome> createState() => _ScreenHomeState();
@@ -49,13 +49,13 @@ class _ScreenHomeState extends State<ScreenHome> {
       context.read<ProductBloc>().add(GetProducttsEvent());
     } else {
       notification.sendNotification('Network Error', 'You are offline');
-      print('hello hai how are you ');
       context
           .read<ProductBloc>()
           .add(GetOfflineProductDetailsInDatabaseEvent());
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 4,

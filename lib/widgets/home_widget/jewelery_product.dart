@@ -27,7 +27,7 @@ class JeweleryItemWidget extends StatelessWidget {
             isOffline: true,
           );
         } else if (state is LocalProductNotFoundState) {
-          return Center(
+          return const Center(
             child: Text("Turn on you data to show product information"),
           );
         }

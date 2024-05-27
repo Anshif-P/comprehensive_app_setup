@@ -10,6 +10,7 @@ class TextFieldWidget extends StatefulWidget {
   final bool textVisibility;
   final FormFieldValidator validator;
   bool isObscure = true;
+  final bool isHintShwo;
 
   TextFieldWidget({
     super.key,
@@ -17,6 +18,7 @@ class TextFieldWidget extends StatefulWidget {
     required this.controller,
     required this.icon,
     required this.validator,
+    required this.isHintShwo,
     this.isObscure = false,
     this.textVisibility = false,
   });
@@ -70,7 +72,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
               : null,
           contentPadding:
               const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          hintText: widget.hintText,
+          hintText: widget.isHintShwo ? widget.hintText : null,
           hintStyle: AppText.mediumGrey,
         ),
       ),

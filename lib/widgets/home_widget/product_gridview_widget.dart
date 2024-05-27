@@ -24,8 +24,6 @@ class ProductGridViewWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         final data = productList[index];
 
-        print('sr produt image path ${data.localImagePath}');
-
         return Container(
           width: double.maxFinite,
           decoration: BoxDecoration(

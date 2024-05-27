@@ -19,43 +19,65 @@ class DatabaseHelper {
     final path = await getDatabasesPath();
     return await openDatabase(
       join(path, 'products.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          '''
-          CREATE TABLE products(
-            id INTEGER PRIMARY KEY,
-            title TEXT,
-            category TEXT,
-            price REAL,
-            image TEXT,
-            localImagePath TEXT
-          )
-           CREATE TABLE user(
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            age INTEGER
-          )
-
-          ''',
-        );
+      onCreate: (db, version) async {
+        await db.execute('''
+        CREATE TABLE products(
+          id INTEGER PRIMARY KEY,
+          title TEXT,
+          category TEXT,
+          price REAL,
+          image TEXT,
+          localImagePath TEXT
+        )
+        ''');
+        await db.execute('''
+        CREATE TABLE user(
+          id INTEGER PRIMARY KEY,
+          imagePath TEXT
+        )
+        ''');
       },
       version: 1,
     );
   }
 
-  Future<void> insertUserDetails(Map<String, dynamic> map) async {
+  Future<int> insertOrUpdateUserDetails(Map<String, dynamic> map) async {
     final db = await database;
-    await db.insert('user', {'name': map['name'], 'age': map['age']});
+
+    try {
+      final List<Map<String, dynamic>> existingUser = await db.query(
+        'user',
+        where: 'id = ?',
+        whereArgs: [map['id']],
+      );
+
+      print('Existing user-------------- $existingUser');
+      if (existingUser.isNotEmpty) {
+        return await db.update(
+          'user',
+          {'imagePath': map['imagePath']},
+          where: 'id = ?',
+          whereArgs: [map['id']],
+        );
+      } else {
+        return await db
+            .insert('user', {'id': map['id'], 'imagePath': map['imagePath']});
+      }
+    } catch (e) {
+      print('Exception  $e');
+      return -1;
+    }
   }
 
-  Future<List<User>> getUserDetails() async {
+  Future<User?> getUserDetails() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('user');
-    print('User Map -${maps}');
 
-    return List.generate(maps.length, (i) {
-      return User.fromMap(maps[i]);
-    });
+    if (maps.isNotEmpty) {
+      return User.fromMap(maps.first);
+    } else {
+      return null;
+    }
   }
 
   Future<void> insertProduct(ProductModel product) async {
@@ -65,15 +87,11 @@ class DatabaseHelper {
       product.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-    print("Product to Json ----------${product.toJson()}");
   }
 
   Future<List<ProductModel>> getProducts() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db.query('products');
-    print(
-        ' Map ------------------------------Map ---------map length------${maps.length}');
-
     return List.generate(maps.length, (i) {
       return ProductModel.fromJson(maps[i]);
     });

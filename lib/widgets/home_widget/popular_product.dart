@@ -22,14 +22,13 @@ class PopularProductWidget extends StatelessWidget {
                   element.category == "women's clothing" ||
                   element.category == "men's clothing")
               .toList();
-          print('offline product ${productList[0].category}');
 
           return ProductGridViewWidget(
             productList: productList,
             isOffline: true,
           );
         } else if (state is LocalProductNotFoundState) {
-          return Center(
+          return const Center(
             child: Text("Turn on you data to show product information"),
           );
         }
