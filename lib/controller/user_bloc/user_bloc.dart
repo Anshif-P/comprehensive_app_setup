@@ -13,18 +13,16 @@ class UserBloc extends Bloc<UserEvent, UserState> {
   }
   FutureOr<void> addUserDetailsToDatabase(
       AddUserDetailsToDatabase event, Emitter<UserState> emit) async {
-    final value = await UserRepo().inserUserDetialsToDatabase(
+    await UserRepo().inserUserDetialsToDatabase(
         {'imagePath': event.imagePath, 'id': event.userId ?? -1});
-    if (value != -1) {
-      emit(AddUserDetailsSuccessState());
-    } else {
-      emit(AddUserDetailsFailedState(errorMessage: 'somthing went wrong'));
-    }
+
+    emit(AddUserDetailsSuccessState());
   }
 
   FutureOr<void> getUserDetailsFromDatabaseEvent(
       GetUserDetailsFromDatabaseEvent event, Emitter<UserState> emit) async {
     final result = await UserRepo().getUserDetailsFromDatabase();
+
     if (result != null) {
       emit(GetUserDetailsSuccessState(userDetails: result));
     } else {

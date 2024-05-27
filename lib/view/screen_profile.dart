@@ -109,7 +109,6 @@ class _ScreenProfileState extends State<ScreenProfile> {
               child: ButtonWidget(
                   onpressFunction: () {
                     if (imagePath != '') {
-                      print('authentication completed');
                       context.read<UserBloc>().add(AddUserDetailsToDatabase(
                           imagePath: imagePath, userId: userId));
                     } else {
