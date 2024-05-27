@@ -51,7 +51,6 @@ class DatabaseHelper {
         whereArgs: [map['id']],
       );
 
-      print('Existing user-------------- $existingUser');
       if (existingUser.isNotEmpty) {
         return await db.update(
           'user',
@@ -64,7 +63,6 @@ class DatabaseHelper {
             .insert('user', {'id': map['id'], 'imagePath': map['imagePath']});
       }
     } catch (e) {
-      print('Exception  $e');
       return -1;
     }
   }

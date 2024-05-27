@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:finfresh_machin_task/controller/product_bloc/product_bloc.dart';
 import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:finfresh_machin_task/util/constance/text_style.dart';
 import 'package:finfresh_machin_task/util/notification/notification.dart';
+import 'package:finfresh_machin_task/view/screen_profile.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/electronics_product.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/jewelery_product.dart';
 import 'package:finfresh_machin_task/widgets/home_widget/popular_product.dart';
@@ -11,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:tab_indicator_styler/tab_indicator_styler.dart';
+import '../controller/user_bloc/user_bloc.dart';
 import '../util/constance/const_items.dart';
 import '../widgets/home_widget/clothing_product.dart';
 import '../widgets/home_widget/floating_tab_bar.dart';
@@ -61,24 +64,33 @@ class _ScreenHomeState extends State<ScreenHome> {
       length: 4,
       initialIndex: 0,
       child: Scaffold(
-        drawer: const Drawer(
-          child: CircleAvatar(),
-        ),
-        backgroundColor: AppColor.extraLightGrey,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
-          backgroundColor: AppColor.extraLightGrey,
-          leading: Builder(
-            builder: (context) => InkWell(
-              onTap: () => Scaffold.of(context).openDrawer(),
-              child: const Icon(
-                Icons.menu,
-                size: 30,
-              ),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          leading: GestureDetector(
+            onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const ScreenProfile())),
+            child: BlocBuilder<UserBloc, UserState>(
+              builder: (context, state) {
+                if (state is GetUserDetailsSuccessState) {
+                  return CircleAvatar(
+                      radius: 60,
+                      backgroundImage:
+                          FileImage(File(state.userDetails.imagePath!)));
+                }
+
+                return const CircleAvatar(
+                  radius: 60,
+                  backgroundImage: AssetImage('assets/images/download.jpg'),
+                );
+              },
             ),
           ),
           actions: const [
-            Icon(Icons.qr_code_scanner_outlined),
+            Icon(
+              Icons.qr_code_scanner_outlined,
+            ),
             SizedBox(
               width: 15,
             ),
@@ -133,13 +145,14 @@ class _ScreenHomeState extends State<ScreenHome> {
 
   Container _header(BuildContext context) {
     return Container(
-      color: AppColor.extraLightGrey,
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
           padding: const EdgeInsets.only(left: 15),
           child: Text(
             'Choose Brand',
-            style: AppText.mediumdark,
+            style:
+                TextStyle(color: Theme.of(context).primaryColor, fontSize: 14),
           ),
         ),
         SizedBox(
@@ -189,6 +202,7 @@ class _ScreenHomeState extends State<ScreenHome> {
     return SliverPersistentHeader(
       delegate: FloatingTabBar(
         TabBar(
+          overlayColor: const MaterialStatePropertyAll(Colors.blue),
           isScrollable: true,
           tabAlignment: TabAlignment.start,
           dividerColor: Colors.transparent,

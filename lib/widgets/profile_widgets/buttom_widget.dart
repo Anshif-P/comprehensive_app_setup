@@ -1,4 +1,3 @@
-import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:finfresh_machin_task/util/constance/text_style.dart';
 import 'package:flutter/material.dart';
 
@@ -41,8 +40,8 @@ class ButtonWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            backgroundColor: MaterialStateProperty.all(
-                colorCheck ? AppColor.primaryColor : Colors.white),
+            backgroundColor:
+                MaterialStateProperty.all(Theme.of(context).primaryColor),
           ),
           onPressed: onpressFunction,
           child: loadingCheck

@@ -50,6 +50,7 @@ dependencies:
   internet_connection_checker_plus: ^2.2.0
   flutter_local_notifications: ^17.1.2
   image_picker: ^1.0.8
+  local_auth: ^2.1.8
 
 dev_dependencies:
   flutter_test:

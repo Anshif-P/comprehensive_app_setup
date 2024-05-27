@@ -23,7 +23,6 @@ class ProductGridViewWidget extends StatelessWidget {
           crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 10),
       itemBuilder: (context, index) {
         final data = productList[index];
-
         return Container(
           width: double.maxFinite,
           decoration: BoxDecoration(

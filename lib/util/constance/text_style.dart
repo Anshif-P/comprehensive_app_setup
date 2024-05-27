@@ -2,11 +2,10 @@ import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:flutter/material.dart';
 
 class AppText {
-  static TextStyle get xSmall => TextStyle(
+  static TextStyle get xSmall => const TextStyle(
         fontSize: 11.5,
         fontWeight: FontWeight.w500,
         fontFamily: 'Poppins',
-        color: Colors.grey[500],
       );
   static TextStyle get standerdSize =>
       const TextStyle(fontSize: 16, fontWeight: FontWeight.w600);

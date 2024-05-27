@@ -17,9 +17,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         {'imagePath': event.imagePath, 'id': event.userId ?? -1});
     if (value != -1) {
       emit(AddUserDetailsSuccessState());
-      add(GetUserDetailsFromDatabaseEvent());
     } else {
-      emit(AddUserDetailsFailedState());
+      emit(AddUserDetailsFailedState(errorMessage: 'somthing went wrong'));
     }
   }
 

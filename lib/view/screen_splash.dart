@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'package:finfresh_machin_task/controller/user_bloc/user_bloc.dart';
 import 'package:finfresh_machin_task/util/constance/colors.dart';
 import 'package:finfresh_machin_task/util/constance/text_style.dart';
-import 'package:finfresh_machin_task/view/screen_parent.dart';
+import 'package:finfresh_machin_task/view/screen_home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:local_auth/local_auth.dart';
 
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({Key? key}) : super(key: key);
@@ -14,12 +17,14 @@ class ScreenSplash extends StatefulWidget {
 class _ScreenSplashState extends State<ScreenSplash> {
   StreamSubscription? isOnlineConnected;
   late ValueNotifier<bool> isOnline;
+  final LocalAuthentication auth = LocalAuthentication();
+  bool isAuthenticated = false;
 
   @override
   void initState() {
     super.initState();
     isOnline = ValueNotifier<bool>(false);
-    userLoginValidation();
+    _authenticate();
   }
 
   @override
@@ -32,6 +37,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
         const Expanded(flex: 1, child: SizedBox()),
         Expanded(
@@ -68,11 +74,24 @@ class _ScreenSplashState extends State<ScreenSplash> {
     );
   }
 
-  void userLoginValidation() async {
-    Future.delayed(const Duration(seconds: 4), () {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => ScreenParentNavigation()),
-      );
-    });
+  Future<void> _authenticate() async {
+    bool canAuthenticateWithBiometrics = await auth.canCheckBiometrics;
+    if (canAuthenticateWithBiometrics) {
+      try {
+        final bool didAuthenticate = await auth.authenticate(
+          localizedReason: 'Please authenticate to show Bank balance',
+          options: const AuthenticationOptions(biometricOnly: false),
+        );
+        if (didAuthenticate) {
+          Future.delayed(const Duration(seconds: 4), () {
+            context.read<UserBloc>().add(GetUserDetailsFromDatabaseEvent());
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (_) => const ScreenHome()),
+            );
+          });
+        }
+        // ignore: empty_catches
+      } catch (e) {}
+    }
   }
 }

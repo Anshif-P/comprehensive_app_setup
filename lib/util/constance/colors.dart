@@ -17,19 +17,4 @@ class AppColor {
     const Color.fromARGB(255, 199, 135, 9),
     Colors.green
   ];
-
-  // static Color color(String name) {
-  //   name = name.toLowerCase().trim();
-  //   switch (name) {
-  //     case 'classic':
-  //       return Colors.blue[900]!;
-  //     case 'elite':
-  //       return const Color(0xff0B6623);
-  //     case 'deluxe':
-  //       return const Color(0xff35424A);
-  //     case 'luxury':
-  //       return gold;
-  //     default:
-  //       return primaryColor;
-  //   }
 }

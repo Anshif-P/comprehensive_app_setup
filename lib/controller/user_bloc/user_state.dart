@@ -6,7 +6,11 @@ final class UserInitial extends UserState {}
 
 final class AddUserDetailsSuccessState extends UserState {}
 
-final class AddUserDetailsFailedState extends UserState {}
+final class AddUserDetailsFailedState extends UserState {
+  final String errorMessage;
+
+  AddUserDetailsFailedState({required this.errorMessage});
+}
 
 final class GetUserDetailsSuccessState extends UserState {
   final User userDetails;
